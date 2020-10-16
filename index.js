@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 // const morgan = require("morgan");
 // const cors = require("cors");
 
@@ -11,6 +12,9 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:3001"}));
+// app.use(addAlowOriginHeader);
+// app.options('*', addCorsHeader);
 // app.use(express.urlencoded());
 
 const PORT = process.env.PORT || 3001;
@@ -24,12 +28,26 @@ app.get("/hello", (req, res, next) => {
     res.send("Hello world!!!")
 });
 
-
-app.get('/api/contacts', (req, res, next) => {
+app.get("/api/contacts", (req, res, next) => {
     // res.send({
     //     contacts: Array.from(contacts.values());
     // });
 });
+
+function addAlowOriginHeader(req, res, next) {
+    res.set("Access-Control-Allow-Methods", "http://localhost:3000");
+    next();
+}
+
+function addCorsHeader(req, res, next) {
+    res.set('Access-Control-Allow-Methods', req.headers['access-control-request-method']);
+    res.set('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
+
+    res.status(200).send();
+}
+
+
+
 
 // app.get('/api/contacts/:contactId', (req, res) => {
 
@@ -51,7 +69,7 @@ app.get('/api/contacts', (req, res, next) => {
 // app.use(morgan("tiny"));
 
 // app.use((req, res, next) => {
-    
+
 // });
 
 app.listen(PORT, err => err ? console.error(err) : console.log("server start"));
