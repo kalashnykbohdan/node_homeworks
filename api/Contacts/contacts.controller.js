@@ -78,7 +78,7 @@ class ContactsController {
         console.log("newContact", newContact);
         contacts.push(newContact);
         console.log("contacts", contacts);
-        return res.send();
+        return res.status(201).send();
     }
 
     async _updateContact(req, res, next){
